@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 import PrivateRoute from "@/app/components/PrivateRoute";
 import toast from "react-hot-toast";
-import axios from "axios";
-
-const API = process.env.NEXT_PUBLIC_API_URL;
+import useAxiosSecure from "@/app/hooks/useAxiosSecure";
 
 const MyBookingsPage = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure(); // ✅ axios এর বদলে axiosSecure
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [confirmId, setConfirmId] = useState(null);
@@ -17,7 +16,7 @@ const MyBookingsPage = () => {
   const fetchBookings = async () => {
     if (!user?.email) return;
     try {
-      const res = await axios.get(`${API}/bookings?email=${user.email}`);
+      const res = await axiosSecure.get(`/bookings?email=${user.email}`);
       setBookings(res.data);
     } catch (err) {
       toast.error("Failed to load bookings!");
@@ -29,13 +28,13 @@ const MyBookingsPage = () => {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (user?.email) fetchBookings();
-   
+  
   }, [user]);
 
-  // ✅ Cancel — PATCH request, status "cancelled"
+  // ✅ Cancel — PATCH request
   const handleCancel = async (id) => {
     try {
-      const res = await axios.patch(`${API}/bookings/${id}`);
+      const res = await axiosSecure.patch(`/bookings/${id}`);
       setBookings((prev) =>
         prev.map((b) => (b._id === id ? res.data : b))
       );
@@ -119,7 +118,7 @@ const MyBookingsPage = () => {
         )}
       </div>
 
-      {/* ✅ Confirm Modal */}
+      {/* Confirm Modal */}
       {confirmId && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
           <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl w-full max-w-sm shadow-xl text-center">

@@ -11,6 +11,9 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../lib/firebase";
+import axios from "axios";
+
+const API = process.env.NEXT_PUBLIC_API_URL;
 
 export const AuthContext = createContext(null);
 
@@ -20,8 +23,23 @@ export const AuthProvider = ({ children }) => {
 
   // Auth state observer
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+
+      // ✅ User থাকলে token নাও, না থাকলে মুছো
+      if (currentUser?.email) {
+        try {
+          const res = await axios.post(`${API}/auth/jwt`, {
+            email: currentUser.email,
+          });
+          localStorage.setItem("token", res.data.token);
+        } catch (err) {
+          console.error("Token error:", err);
+        }
+      } else {
+        localStorage.removeItem("token");
+      }
+
       setLoading(false);
     });
     return () => unsubscribe();
@@ -32,22 +50,42 @@ export const AuthProvider = ({ children }) => {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(result.user, { displayName: name, photoURL });
     setUser({ ...result.user, displayName: name, photoURL });
+
+    // ✅ Token save করো
+    const res = await axios.post(`${API}/auth/jwt`, { email });
+    localStorage.setItem("token", res.data.token);
+
     return result;
   };
 
   // Login
-  const loginUser = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const loginUser = async (email, password) => {
+    const result = await signInWithEmailAndPassword(auth, email, password);
+
+    // ✅ Token save করো
+    const res = await axios.post(`${API}/auth/jwt`, { email });
+    localStorage.setItem("token", res.data.token);
+
+    return result;
   };
 
   // Google Login
-  const googleLogin = () => {
+  const googleLogin = async () => {
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+
+    // ✅ Token save করো
+    const res = await axios.post(`${API}/auth/jwt`, {
+      email: result.user.email,
+    });
+    localStorage.setItem("token", res.data.token);
+
+    return result;
   };
 
   // Logout
-  const logoutUser = () => {
+  const logoutUser = async () => {
+    localStorage.removeItem("token"); // ✅ Token মুছো
     return signOut(auth);
   };
 
