@@ -33,8 +33,8 @@ const AvailableTutors = () => {
   return (
     <section className="max-w-7xl mx-auto px-4 py-20">
       <div className="text-center mb-14">
-        <h2 className="text-4xl font-bold text-slate-800">Available Tutors</h2>
-        <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+        <h2 className="text-4xl font-bold text-slate-800 dark:text-white">Available Tutors</h2>
+        <p className="mt-4 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
           Explore our top-rated tutors and book sessions
           based on your learning goals and schedule.
         </p>

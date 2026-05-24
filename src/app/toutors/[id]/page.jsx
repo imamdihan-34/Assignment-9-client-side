@@ -15,19 +15,28 @@ export default function TutorDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    const fetchTutor = async () => {
-      try {
-        const res = await axios.get(`${API}/tutors/${id}`);
-        setTutor(res.data);
-      } catch (err) {
-        console.error("Failed to load tutor");
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (id) fetchTutor();
-  }, [id]);
+  const fetchTutor = async () => {
+    try {
+      const res = await axios.get(`${API}/tutors/${id}`);
+      setTutor(res.data);
+    } catch (err) {
+      console.error("Failed to load tutor");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+ useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  if (id) fetchTutor();
+
+}, [id]);
+
+  // ✅ Booking success হলে tutor reload করো
+  const handleBookingSuccess = async () => {
+    const res = await axios.get(`${API}/tutors/${id}`);
+    setTutor(res.data);
+  };
 
   if (loading) return (
     <div className="flex justify-center items-center min-h-screen">
@@ -44,15 +53,15 @@ export default function TutorDetailsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
-      <div className="bg-white border rounded-2xl shadow-md overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md overflow-hidden">
 
         {/* Header */}
-        <div className="bg-blue-50 p-8 flex flex-col md:flex-row gap-6 items-center">
+        <div className="bg-blue-50 dark:bg-gray-700 p-8 flex flex-col md:flex-row gap-6 items-center">
           <div className="relative w-32 h-32 rounded-2xl overflow-hidden shrink-0">
             <Image src={tutor.photo} alt={tutor.tutorName} fill sizes="128px" className="object-cover" />
           </div>
           <div className="text-center md:text-left">
-            <h1 className="text-3xl font-bold text-slate-800">{tutor.tutorName}</h1>
+            <h1 className="text-3xl font-bold text-slate-800 dark:text-white">{tutor.tutorName}</h1>
             <p className="text-blue-600 font-medium mt-1">{tutor.subject}</p>
             <span className="inline-block mt-2 bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm">
               Available
@@ -70,11 +79,11 @@ export default function TutorDetailsPage() {
             { icon: <Layers className="h-5 w-5" />, label: "Days", value: tutor.availableDays },
             { icon: <BookOpen className="h-5 w-5" />, label: "Experience", value: tutor.experience },
           ].map((item, i) => (
-            <div key={i} className="flex items-start gap-3 bg-gray-50 rounded-xl p-4">
+            <div key={i} className="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
               <span className="text-blue-600 mt-0.5">{item.icon}</span>
               <div>
-                <p className="text-xs text-gray-500">{item.label}</p>
-                <p className="font-semibold text-slate-800">{item.value}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{item.label}</p>
+                <p className="font-semibold text-slate-800 dark:text-white">{item.value}</p>
               </div>
             </div>
           ))}
@@ -82,8 +91,8 @@ export default function TutorDetailsPage() {
 
         {/* Institution */}
         <div className="px-8 pb-4">
-          <p className="text-gray-500 text-sm">
-            Institution: <span className="text-slate-800 font-medium">{tutor.institution}</span>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
+            Institution: <span className="text-slate-800 dark:text-white font-medium">{tutor.institution}</span>
           </p>
         </div>
 
@@ -106,8 +115,13 @@ export default function TutorDetailsPage() {
         </div>
       </div>
 
+      {/* ✅ onBookingSuccess pass করা হয়েছে */}
       {showModal && (
-        <BookSessionModal tutor={tutor} closeModal={() => setShowModal(false)} />
+        <BookSessionModal
+          tutor={tutor}
+          closeModal={() => setShowModal(false)}
+          onBookingSuccess={handleBookingSuccess}
+        />
       )}
     </div>
   );

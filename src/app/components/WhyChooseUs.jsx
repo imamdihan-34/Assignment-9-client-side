@@ -2,16 +2,16 @@ import { ShieldCheck, Clock3, Users } from "lucide-react";
 
 const WhyChooseUs = () => {
   return (
-    <section className="bg-slate-100 py-20">
+    <section className="dark:bg-gray-900 py-20  text-slate-800  dark:text-white">
 
       <div className="max-w-7xl mx-auto px-4">
 
         <div className="text-center mb-14">
-          <h2 className="text-4xl font-bold">
+          <h2 className="text-4xl font-bold text-slate-800 dark:text-white">
             Why Choose MediQueue?
           </h2>
 
-          <p className="mt-4 text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             Smart tutor booking with modern learning support.
           </p>
         </div>
@@ -19,7 +19,7 @@ const WhyChooseUs = () => {
         <div className="grid md:grid-cols-3 gap-8">
 
           {/* Card 1 */}
-          <div className="bg-white p-8 rounded-3xl shadow-lg text-center">
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-lg text-center">
             <ShieldCheck
               size={60}
               className="mx-auto text-blue-600"
@@ -29,13 +29,13 @@ const WhyChooseUs = () => {
               Trusted Tutors
             </h3>
 
-            <p className="text-gray-600 mt-3">
+            <p className="text-gray-500 dark:text-gray-400">
               Learn from verified and experienced tutors.
             </p>
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white p-8 rounded-3xl shadow-lg text-center">
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-lg text-center">
             <Clock3
               size={60}
               className="mx-auto text-cyan-600"
@@ -45,13 +45,13 @@ const WhyChooseUs = () => {
               Flexible Schedule
             </h3>
 
-            <p className="text-gray-600 mt-3">
+            <p className="text-gray-500 dark:text-gray-400">
               Book sessions based on your preferred time.
             </p>
           </div>
 
           {/* Card 3 */}
-          <div className="bg-white p-8 rounded-3xl shadow-lg text-center">
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-lg text-center">
             <Users
               size={60}
               className="mx-auto text-indigo-600"
@@ -61,7 +61,7 @@ const WhyChooseUs = () => {
               Easy Learning
             </h3>
 
-            <p className="text-gray-600 mt-3">
+            <p className="text-gray-500 dark:text-gray-400">
               Smooth and organized online tutoring experience.
             </p>
           </div>

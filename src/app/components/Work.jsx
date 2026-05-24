@@ -23,11 +23,11 @@ const Work = () => {
     <section className="max-w-7xl mx-auto px-4 py-20">
 
       <div className="text-center mb-14">
-        <h2 className="text-4xl font-bold">
+        <h2 className="text-4xl font-bold text-slate-800 dark:text-white">
           How It Works
         </h2>
 
-        <p className="mt-4 text-gray-600">
+        <p className="text-gray-600 dark:text-gray-300">
           Start learning in just a few easy steps.
         </p>
       </div>
@@ -37,7 +37,7 @@ const Work = () => {
         {steps.map((step) => (
           <div
             key={step.id}
-            className="bg-white border p-10 rounded-3xl text-center shadow-md hover:shadow-xl transition"
+            className="bg-white dark:bg-gray-800  border p-10 rounded-3xl text-center shadow-md hover:shadow-xl transition"
           >
             <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
               {step.id}
@@ -47,7 +47,7 @@ const Work = () => {
               {step.title}
             </h3>
 
-            <p className="text-gray-600 mt-4">
+            <p className="text-gray-500 dark:text-gray-400">
               {step.desc}
             </p>
           </div>

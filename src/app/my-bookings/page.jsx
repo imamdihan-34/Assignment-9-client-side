@@ -12,10 +12,8 @@ const MyBookingsPage = () => {
   const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editId, setEditId] = useState(null);
-  const [editData, setEditData] = useState({ studentName: "", phone: "" });
+  const [confirmId, setConfirmId] = useState(null);
 
-  // Server থেকে bookings আনো
   const fetchBookings = async () => {
     if (!user?.email) return;
     try {
@@ -31,37 +29,21 @@ const MyBookingsPage = () => {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (user?.email) fetchBookings();
+   
   }, [user]);
 
-  // Cancel
+  // ✅ Cancel — PATCH request, status "cancelled"
   const handleCancel = async (id) => {
     try {
-      await axios.delete(`${API}/bookings/${id}`);
-      setBookings((prev) => prev.filter((b) => b._id !== id));
+      const res = await axios.patch(`${API}/bookings/${id}`);
+      setBookings((prev) =>
+        prev.map((b) => (b._id === id ? res.data : b))
+      );
       toast.success("Booking cancelled!");
     } catch (err) {
       toast.error("Failed to cancel booking!");
     }
-  };
-
-  // Edit শুরু
-  const handleEditStart = (booking) => {
-    setEditId(booking._id);
-    setEditData({ studentName: booking.studentName, phone: booking.phone });
-  };
-
-  // Edit সেভ
-  const handleEditSave = async (id) => {
-    try {
-      const res = await axios.put(`${API}/bookings/${id}`, editData);
-      setBookings((prev) =>
-        prev.map((b) => (b._id === id ? res.data : b))
-      );
-      setEditId(null);
-      toast.success("Booking updated!");
-    } catch (err) {
-      toast.error("Failed to update booking!");
-    }
+    setConfirmId(null);
   };
 
   if (loading) return (
@@ -72,84 +54,96 @@ const MyBookingsPage = () => {
 
   return (
     <PrivateRoute>
-      <div className="max-w-5xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold mb-2">My Bookings</h1>
-        <p className="text-gray-500 mb-8">Total: {bookings.length} booking(s)</p>
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <h1 className="text-3xl font-bold mb-2 dark:text-white">My Booked Sessions</h1>
+        <p className="text-gray-500 dark:text-gray-400 mb-8">Total: {bookings.length} booking(s)</p>
 
         {bookings.length === 0 ? (
-          <p className="text-center text-gray-400 py-20 text-lg">No bookings yet.</p>
+          <div className="text-center py-24 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
+            <p className="text-gray-400 text-lg">No bookings yet.</p>
+            <p className="text-gray-400 text-sm mt-2">Book a session from the Tutors page.</p>
+          </div>
         ) : (
-          <div className="grid gap-4">
-            {bookings.map((b) => (
-              <div key={b._id} className="bg-white border rounded-2xl p-6 shadow-sm">
-
-                {editId === b._id ? (
-                  // Edit Mode
-                  <div className="space-y-3">
-                    <p className="font-bold text-blue-600">{b.tutorName} — {b.subject}</p>
-                    <input
-                      type="text"
-                      value={editData.studentName}
-                      onChange={(e) => setEditData({ ...editData, studentName: e.target.value })}
-                      className="w-full border p-2 rounded-xl outline-none focus:border-blue-500"
-                      placeholder="Student Name"
-                    />
-                    <input
-                      type="text"
-                      value={editData.phone}
-                      onChange={(e) => setEditData({ ...editData, phone: e.target.value })}
-                      className="w-full border p-2 rounded-xl outline-none focus:border-blue-500"
-                      placeholder="Phone Number"
-                    />
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => handleEditSave(b._id)}
-                        className="bg-green-500 text-white px-5 py-2 rounded-xl hover:bg-green-600 transition text-sm"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={() => setEditId(null)}
-                        className="bg-gray-200 text-gray-700 px-5 py-2 rounded-xl hover:bg-gray-300 transition text-sm"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  // View Mode
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-800">{b.tutorName}</h3>
-                      <p className="text-blue-600 text-sm">{b.subject}</p>
-                      <p className="text-gray-500 text-sm mt-1">👤 {b.studentName}</p>
-                      <p className="text-gray-500 text-sm">📞 {b.phone}</p>
-                      <p className="text-gray-500 text-sm">🕒 {b.timeSlot}</p>
-                      <p className="text-gray-500 text-sm">💰 ${b.hourlyFee}/hr</p>
-                      <p className="text-gray-400 text-xs mt-1">Booked: {new Date(b.createdAt).toLocaleDateString()}</p>
-                    </div>
-
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => handleEditStart(b)}
-                        className="bg-blue-500 text-white px-5 py-2 rounded-xl hover:bg-blue-600 transition text-sm"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleCancel(b._id)}
-                        className="bg-red-500 text-white px-5 py-2 rounded-xl hover:bg-red-600 transition text-sm"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+          <div className="overflow-x-auto rounded-2xl border border-gray-200 dark:border-gray-700">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-300">
+                <tr>
+                  <th className="px-5 py-4 text-left">#</th>
+                  <th className="px-5 py-4 text-left">Tutor</th>
+                  <th className="px-5 py-4 text-left">Student</th>
+                  <th className="px-5 py-4 text-left">Email</th>
+                  <th className="px-5 py-4 text-left">Time</th>
+                  <th className="px-5 py-4 text-left">Fee</th>
+                  <th className="px-5 py-4 text-left">Status</th>
+                  <th className="px-5 py-4 text-left">Action</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
+                {bookings.map((b, i) => (
+                  <tr key={b._id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                    <td className="px-5 py-4 text-gray-400">{i + 1}</td>
+                    <td className="px-5 py-4">
+                      <p className="font-semibold text-slate-800 dark:text-white">{b.tutorName}</p>
+                      <p className="text-blue-600 text-xs">{b.subject}</p>
+                    </td>
+                    <td className="px-5 py-4 text-gray-600 dark:text-gray-300">{b.studentName}</td>
+                    <td className="px-5 py-4 text-gray-600 dark:text-gray-300">{b.userEmail}</td>
+                    <td className="px-5 py-4 text-gray-600 dark:text-gray-300">{b.timeSlot}</td>
+                    <td className="px-5 py-4 text-gray-600 dark:text-gray-300">${b.hourlyFee}/hr</td>
+                    <td className="px-5 py-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        b.status === "cancelled"
+                          ? "bg-red-100 text-red-600"
+                          : "bg-green-100 text-green-600"
+                      }`}>
+                        {b.status === "cancelled" ? "Cancelled" : "Confirmed"}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      {b.status === "cancelled" ? (
+                        <span className="text-gray-400 text-xs">—</span>
+                      ) : (
+                        <button
+                          onClick={() => setConfirmId(b._id)}
+                          className="bg-red-500 text-white px-3 py-1 rounded-lg text-xs hover:bg-red-600 transition"
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
+
+      {/* ✅ Confirm Modal */}
+      {confirmId && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl w-full max-w-sm shadow-xl text-center">
+            <h2 className="text-xl font-bold mb-2 dark:text-white">Cancel Booking?</h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">
+              Are you sure you want to cancel this booking?
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => handleCancel(confirmId)}
+                className="bg-red-500 text-white px-6 py-2 rounded-xl hover:bg-red-600 transition"
+              >
+                Yes, Cancel
+              </button>
+              <button
+                onClick={() => setConfirmId(null)}
+                className="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white px-6 py-2 rounded-xl hover:bg-gray-300 transition"
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </PrivateRoute>
   );
 };
