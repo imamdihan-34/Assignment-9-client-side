@@ -5,8 +5,6 @@ import TutorCard from "../components/ToutorCard";
 import axios from "axios";
 import { FiSearch, FiFilter, FiX } from "react-icons/fi";
 
-const API = process.env.NEXT_PUBLIC_API_URL;
-
 const AvailableTutors = ({ showAll = false }) => {
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,16 +16,17 @@ const AvailableTutors = ({ showAll = false }) => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
-
       if (search) params.append("search", search);
       if (startDate) params.append("startDate", startDate);
       if (endDate) params.append("endDate", endDate);
 
-      const res = await axios.get(`${API}/tutors?${params.toString()}`);
-
+      // ✅ hardcode করো
+      const res = await axios.get(
+        `http://localhost:5000/tutors?${params.toString()}`
+      );
       setTutors(showAll ? res.data : res.data.slice(0, 6));
     } catch (err) {
-      console.error("Failed to load tutors");
+      console.error("Failed to load tutors", err.message);
     } finally {
       setLoading(false);
     }
@@ -36,6 +35,7 @@ const AvailableTutors = ({ showAll = false }) => {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTutors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = (e) => {
@@ -75,10 +75,8 @@ const AvailableTutors = ({ showAll = false }) => {
                 className="w-full pl-11 pr-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl outline-none focus:border-blue-500 transition"
               />
             </div>
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition font-medium"
-            >
+            <button type="submit"
+              className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition font-medium">
               Search
             </button>
           </form>
@@ -88,38 +86,28 @@ const AvailableTutors = ({ showAll = false }) => {
               <label className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 Start Date
               </label>
-              <input
-                type="date"
-                value={startDate}
+              <input type="date" value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl outline-none focus:border-blue-500"
-              />
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl outline-none focus:border-blue-500" />
             </div>
 
             <div className="flex-1 space-y-1">
               <label className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 End Date
               </label>
-              <input
-                type="date"
-                value={endDate}
+              <input type="date" value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl outline-none focus:border-blue-500"
-              />
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-xl outline-none focus:border-blue-500" />
             </div>
 
             <div className="flex gap-3">
-              <button
-                onClick={fetchTutors}
-                className="flex items-center gap-2 bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 transition"
-              >
+              <button onClick={fetchTutors}
+                className="flex items-center gap-2 bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 transition">
                 <FiFilter />
                 Filter
               </button>
-              <button
-                onClick={handleReset}
-                className="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white px-5 py-3 rounded-xl hover:bg-gray-300 transition"
-              >
+              <button onClick={handleReset}
+                className="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white px-5 py-3 rounded-xl hover:bg-gray-300 transition">
                 <FiX />
                 Reset
               </button>
@@ -135,19 +123,17 @@ const AvailableTutors = ({ showAll = false }) => {
       ) : tutors.length === 0 ? (
         <div className="text-center py-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl">
           <p className="text-gray-400 text-lg">No tutors found.</p>
-          <button
-            onClick={handleReset}
-            className="mt-4 text-blue-600 hover:underline text-sm"
-          >
+          <button onClick={handleReset}
+            className="mt-4 text-blue-600 hover:underline text-sm">
             Clear filters
           </button>
         </div>
       ) : (
-       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-  {tutors.map((tutor) => (
-    <TutorCard key={tutor._id} tutor={tutor}/>
-  ))}
-</div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+          {tutors.map((tutor) => (
+            <TutorCard key={tutor._id} tutor={tutor} />
+          ))}
+        </div>
       )}
     </section>
   );
