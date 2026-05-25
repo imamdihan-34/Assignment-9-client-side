@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Auth state observer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
@@ -43,36 +42,31 @@ export const AuthProvider = ({ children }) => {
     });
     return () => unsubscribe();
   }, []);
-  // Register
+
   const registerUser = async (name, email, password, photoURL) => {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(result.user, { displayName: name, photoURL });
     setUser({ ...result.user, displayName: name, photoURL });
 
-    // ✅ Token save করো
     const res = await axios.post(`${API}/auth/jwt`, { email });
     localStorage.setItem("token", res.data.token);
 
     return result;
   };
 
-  // Login
   const loginUser = async (email, password) => {
     const result = await signInWithEmailAndPassword(auth, email, password);
 
-    // ✅ Token save করো
     const res = await axios.post(`${API}/auth/jwt`, { email });
     localStorage.setItem("token", res.data.token);
 
     return result;
   };
 
-  // Google Login
   const googleLogin = async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
 
-    // ✅ Token save করো
     const res = await axios.post(`${API}/auth/jwt`, {
       email: result.user.email,
     });
@@ -81,9 +75,8 @@ export const AuthProvider = ({ children }) => {
     return result;
   };
 
-  // Logout
   const logoutUser = async () => {
-    localStorage.removeItem("token"); // ✅ Token মুছো
+    localStorage.removeItem("token");
     return signOut(auth);
   };
 

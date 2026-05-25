@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useContext, useState, useEffect } from "react"; // ✅ useEffect যোগ
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -46,32 +46,52 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-gray-900 px-4">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl">
-        <h2 className="text-4xl font-bold text-center text-blue-600 mb-8">Login</h2>
+        <h2 className="text-4xl font-bold text-center text-blue-600 mb-8">
+          Login
+        </h2>
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
             <label className="font-medium dark:text-white">Email</label>
-            <input type="email" name="email" required placeholder="Enter your email"
-              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" />
+            <input
+              type="email"
+              name="email"
+              required
+              placeholder="Enter your email"
+              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+            />
           </div>
           <div>
             <label className="font-medium dark:text-white">Password</label>
-            <input type="password" name="password" required placeholder="Enter your password"
-              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" />
+            <input
+              type="password"
+              name="password"
+              required
+              placeholder="Enter your password"
+              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+            />
           </div>
-          <button type="submit" disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition"
+          >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
         <div className="my-6 text-center text-gray-400">OR</div>
-        <button onClick={handleGoogleLogin}
-          className="w-full border dark:border-gray-600 py-3 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-100 dark:hover:bg-gray-700 transition dark:text-white">
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full border dark:border-gray-600 py-3 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-100 dark:hover:bg-gray-700 transition dark:text-white"
+        >
           <FcGoogle size={24} />
           Continue with Google
         </button>
         <p className="text-center mt-6 text-gray-600 dark:text-gray-400">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/register" className="text-blue-600 font-semibold hover:underline">
+          <Link
+            href="/auth/register"
+            className="text-blue-600 font-semibold hover:underline"
+          >
             Register
           </Link>
         </p>

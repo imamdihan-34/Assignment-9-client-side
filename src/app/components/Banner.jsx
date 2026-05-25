@@ -9,26 +9,30 @@ const slides = [
     id: 1,
     image: "https://i.ibb.co.com/R4v1k8NG/banner.webp",
     title: "Upgrade your learning experience",
-    subtitle: "Book expert tutors easily and improve your academic performance quickly.",
+    subtitle:
+      "Book expert tutors easily and improve your academic performance quickly.",
   },
   {
     id: 2,
-    image: "https://i.ibb.co.com/gMBN5knc/93b6ee4c-84db-4c44-8651-dfeb3a0a9492.png",
+    image:
+      "https://i.ibb.co.com/gMBN5knc/93b6ee4c-84db-4c44-8651-dfeb3a0a9492.png",
     title: "Learn from the best tutors",
-    subtitle: "Connect with experienced tutors across all subjects and skill levels.",
+    subtitle:
+      "Connect with experienced tutors across all subjects and skill levels.",
   },
   {
     id: 3,
-    image: "https://i.ibb.co.com/tw4zXt83/Gemini-Generated-Image-ujp86aujp86aujp8.png",
+    image:
+      "https://i.ibb.co.com/tw4zXt83/Gemini-Generated-Image-ujp86aujp86aujp8.png",
     title: "Flexible scheduling made easy",
-    subtitle: "Choose your preferred time slots and start learning at your own pace.",
+    subtitle:
+      "Choose your preferred time slots and start learning at your own pace.",
   },
 ];
 
 const Banner = () => {
   const [current, setCurrent] = useState(0);
 
-  // Auto slide
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
@@ -36,13 +40,12 @@ const Banner = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const prev = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+  const prev = () =>
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
   const next = () => setCurrent((prev) => (prev + 1) % slides.length);
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-
-      {/* Slides */}
       <AnimatePresence mode="wait">
         <motion.div
           key={current}
@@ -52,21 +55,17 @@ const Banner = () => {
           transition={{ duration: 0.8 }}
           className="absolute inset-0"
         >
-          {/* Background Image */}
           <img
             src={slides[current].image}
             alt="banner"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          {/* Dark Overlay */}
+
           <div className="absolute inset-0 bg-black/60" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Content */}
       <div className="relative z-10 text-center text-white max-w-3xl mx-auto px-4">
-
-        {/* Badge */}
         <motion.div
           key={`badge-${current}`}
           initial={{ opacity: 0, y: -20 }}
@@ -77,7 +76,6 @@ const Banner = () => {
           ✦ Smart Online Learning Platform
         </motion.div>
 
-        {/* Heading */}
         <motion.h1
           key={`title-${current}`}
           initial={{ opacity: 0, y: 30 }}
@@ -88,7 +86,6 @@ const Banner = () => {
           {slides[current].title}
         </motion.h1>
 
-        {/* Subtitle */}
         <motion.p
           key={`sub-${current}`}
           initial={{ opacity: 0, y: 20 }}
@@ -99,7 +96,6 @@ const Banner = () => {
           {slides[current].subtitle}
         </motion.p>
 
-        {/* Buttons */}
         <motion.div
           key={`btn-${current}`}
           initial={{ opacity: 0, y: 20 }}
@@ -120,7 +116,6 @@ const Banner = () => {
         </motion.div>
       </div>
 
-      {/* Prev/Next Buttons */}
       <button
         onClick={prev}
         className="absolute left-4 z-20 bg-white/20 hover:bg-white/40 text-white w-10 h-10 rounded-full flex items-center justify-center transition"
@@ -134,7 +129,6 @@ const Banner = () => {
         ›
       </button>
 
-      {/* Dots */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {slides.map((_, i) => (
           <button
@@ -146,7 +140,6 @@ const Banner = () => {
           />
         ))}
       </div>
-
     </section>
   );
 };

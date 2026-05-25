@@ -14,7 +14,6 @@ const Navbar = () => {
   const { theme, setTheme } = useTheme();
   const dropdownRef = useRef(null);
 
-  // Dropdown বাইরে click করলে বন্ধ হবে
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -27,13 +26,26 @@ const Navbar = () => {
 
   const navLinks = (
     <>
-      <Link href="/" className="hover:text-blue-500 transition">Home</Link>
-      <Link href="/toutors" className="hover:text-blue-500 transition">Tutors</Link>
+      <Link href="/" className="hover:text-blue-500 transition">
+        Home
+      </Link>
+      <Link href="/toutors" className="hover:text-blue-500 transition">
+        Tutors
+      </Link>
       {user && (
         <>
-          <Link href="/toutors/add-toutor" className="hover:text-blue-500 transition">Add Tutor</Link>
-          <Link href="/my-toutors" className="hover:text-blue-500 transition">My Tutors</Link>
-          <Link href="/my-bookings" className="hover:text-blue-500 transition">My Bookings</Link>
+          <Link
+            href="/toutors/add-toutor"
+            className="hover:text-blue-500 transition"
+          >
+            Add Tutor
+          </Link>
+          <Link href="/my-toutors" className="hover:text-blue-500 transition">
+            My Tutors
+          </Link>
+          <Link href="/my-bookings" className="hover:text-blue-500 transition">
+            My Bookings
+          </Link>
         </>
       )}
     </>
@@ -42,21 +54,15 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 backdrop-blur">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-
-        {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-blue-600">
           MediQueue
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6 font-medium text-gray-700 dark:text-gray-200">
           {navLinks}
         </div>
 
-        {/* Right Side */}
         <div className="hidden md:flex items-center gap-3">
-
-          {/* Theme Toggle */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-600 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition"
@@ -69,7 +75,6 @@ const Navbar = () => {
           </button>
 
           {user ? (
-            // ✅ Profile Dropdown
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setDropdown(!dropdown)}
@@ -86,14 +91,13 @@ const Navbar = () => {
                     <FiUser className="text-blue-600" />
                   </div>
                 )}
-                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${dropdown ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-500 transition-transform ${dropdown ? "rotate-180" : ""}`}
+                />
               </button>
 
-              {/* Dropdown Menu */}
               {dropdown && (
                 <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg overflow-hidden z-50">
-
-                  {/* User Info */}
                   <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
                     <p className="font-semibold text-sm text-slate-800 dark:text-white truncate">
                       {user?.displayName || "User"}
@@ -103,7 +107,6 @@ const Navbar = () => {
                     </p>
                   </div>
 
-                  {/* Links */}
                   <div className="py-1">
                     <Link
                       href="/my-toutors"
@@ -123,7 +126,6 @@ const Navbar = () => {
                     </Link>
                   </div>
 
-                  {/* Logout */}
                   <div className="border-t border-gray-100 dark:border-gray-700 py-1">
                     <button
                       onClick={() => {
@@ -141,19 +143,22 @@ const Navbar = () => {
             </div>
           ) : (
             <>
-              <Link href="/auth/login"
-                className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition text-sm">
+              <Link
+                href="/auth/login"
+                className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition text-sm"
+              >
                 Login
               </Link>
-              <Link href="/auth/register"
-                className="border border-gray-300 dark:border-gray-600 px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition text-sm dark:text-white">
+              <Link
+                href="/auth/register"
+                className="border border-gray-300 dark:border-gray-600 px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition text-sm dark:text-white"
+              >
                 Register
               </Link>
             </>
           )}
         </div>
 
-        {/* Mobile Right */}
         <div className="flex md:hidden items-center gap-2">
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -167,12 +172,15 @@ const Navbar = () => {
           </button>
 
           <button onClick={() => setOpen(!open)}>
-            {open ? <X className="dark:text-white" /> : <Menu className="dark:text-white" />}
+            {open ? (
+              <X className="dark:text-white" />
+            ) : (
+              <Menu className="dark:text-white" />
+            )}
           </button>
         </div>
       </div>
 
-      {/* Mobile Dropdown */}
       {open && (
         <div className="md:hidden px-4 pb-4 flex flex-col gap-4 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border-t border-gray-100 dark:border-gray-700">
           {navLinks}
@@ -182,21 +190,29 @@ const Navbar = () => {
               {/* User info mobile */}
               <div className="flex items-center gap-3 py-2">
                 {user?.photoURL ? (
-                  <img src={user.photoURL} alt="user"
-                    className="w-9 h-9 rounded-full border-2 border-blue-500 object-cover" />
+                  <img
+                    src={user.photoURL}
+                    alt="user"
+                    className="w-9 h-9 rounded-full border-2 border-blue-500 object-cover"
+                  />
                 ) : (
                   <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
                     <FiUser className="text-blue-600" />
                   </div>
                 )}
                 <div>
-                  <p className="font-medium text-sm">{user?.displayName || "User"}</p>
+                  <p className="font-medium text-sm">
+                    {user?.displayName || "User"}
+                  </p>
                   <p className="text-xs text-gray-400">{user?.email}</p>
                 </div>
               </div>
 
               <button
-                onClick={() => { logoutUser(); setOpen(false); }}
+                onClick={() => {
+                  logoutUser();
+                  setOpen(false);
+                }}
                 className="w-full flex items-center gap-2 bg-red-500 text-white py-2 px-4 rounded-xl justify-center"
               >
                 <FiLogOut />
@@ -205,12 +221,18 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              <Link href="/auth/login" onClick={() => setOpen(false)}
-                className="bg-blue-600 text-white py-2 px-4 rounded-xl text-center">
+              <Link
+                href="/auth/login"
+                onClick={() => setOpen(false)}
+                className="bg-blue-600 text-white py-2 px-4 rounded-xl text-center"
+              >
                 Login
               </Link>
-              <Link href="/auth/register" onClick={() => setOpen(false)}
-                className="border py-2 px-4 rounded-xl text-center dark:border-gray-600">
+              <Link
+                href="/auth/register"
+                onClick={() => setOpen(false)}
+                className="border py-2 px-4 rounded-xl text-center dark:border-gray-600"
+              >
                 Register
               </Link>
             </div>

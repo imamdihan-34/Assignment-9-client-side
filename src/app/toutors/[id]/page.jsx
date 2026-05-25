@@ -3,7 +3,14 @@
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Clock, DollarSign, Users, Calendar, BookOpen, Layers } from "lucide-react";
+import {
+  Clock,
+  DollarSign,
+  Users,
+  Calendar,
+  BookOpen,
+  Layers,
+} from "lucide-react";
 import BookSessionModal from "@/app/components/BookSessionModal";
 import axios from "axios";
 
@@ -29,10 +36,8 @@ export default function TutorDetailsPage() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (id) fetchTutor();
-   
   }, [id]);
 
-  // ✅ Dynamic title
   useEffect(() => {
     if (tutor?.tutorName) {
       document.title = `${tutor.tutorName} | MediQueue`;
@@ -46,11 +51,12 @@ export default function TutorDetailsPage() {
     setTutor(res.data);
   };
 
-  if (loading) return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
 
   if (!tutor) return <p className="text-center py-20">Tutor not found.</p>;
 
@@ -62,14 +68,20 @@ export default function TutorDetailsPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md overflow-hidden">
-
-        {/* Header */}
         <div className="bg-blue-50 dark:bg-gray-700 p-8 flex flex-col md:flex-row gap-6 items-center">
           <div className="relative w-32 h-32 rounded-2xl overflow-hidden shrink-0">
-            <Image src={tutor.photo} alt={tutor.tutorName} fill sizes="128px" className="object-cover" />
+            <Image
+              src={tutor.photo}
+              alt={tutor.tutorName}
+              fill
+              sizes="128px"
+              className="object-cover"
+            />
           </div>
           <div className="text-center md:text-left">
-            <h1 className="text-3xl font-bold text-slate-800 dark:text-white">{tutor.tutorName}</h1>
+            <h1 className="text-3xl font-bold text-slate-800 dark:text-white">
+              {tutor.tutorName}
+            </h1>
             <p className="text-blue-600 font-medium mt-1">{tutor.subject}</p>
             <span className="inline-block mt-2 bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm">
               Available
@@ -77,37 +89,70 @@ export default function TutorDetailsPage() {
           </div>
         </div>
 
-        {/* Details */}
         <div className="p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            { icon: <DollarSign className="h-5 w-5" />, label: "Hourly Fee", value: `$${tutor.hourlyFee}` },
-            { icon: <Users className="h-5 w-5" />, label: "Available Slots", value: tutor.totalSlot },
-            { icon: <Calendar className="h-5 w-5" />, label: "Session Starts", value: new Date(tutor.sessionStartDate).toLocaleDateString() },
-            { icon: <Clock className="h-5 w-5" />, label: "Time Slot", value: tutor.timeSlot },
-            { icon: <Layers className="h-5 w-5" />, label: "Days", value: tutor.availableDays },
-            { icon: <BookOpen className="h-5 w-5" />, label: "Experience", value: tutor.experience },
+            {
+              icon: <DollarSign className="h-5 w-5" />,
+              label: "Hourly Fee",
+              value: `$${tutor.hourlyFee}`,
+            },
+            {
+              icon: <Users className="h-5 w-5" />,
+              label: "Available Slots",
+              value: tutor.totalSlot,
+            },
+            {
+              icon: <Calendar className="h-5 w-5" />,
+              label: "Session Starts",
+              value: new Date(tutor.sessionStartDate).toLocaleDateString(),
+            },
+            {
+              icon: <Clock className="h-5 w-5" />,
+              label: "Time Slot",
+              value: tutor.timeSlot,
+            },
+            {
+              icon: <Layers className="h-5 w-5" />,
+              label: "Days",
+              value: tutor.availableDays,
+            },
+            {
+              icon: <BookOpen className="h-5 w-5" />,
+              label: "Experience",
+              value: tutor.experience,
+            },
           ].map((item, i) => (
-            <div key={i} className="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
+            <div
+              key={i}
+              className="flex items-start gap-3 bg-gray-50 dark:bg-gray-700 rounded-xl p-4"
+            >
               <span className="text-blue-600 mt-0.5">{item.icon}</span>
               <div>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{item.label}</p>
-                <p className="font-semibold text-slate-800 dark:text-white">{item.value}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {item.label}
+                </p>
+                <p className="font-semibold text-slate-800 dark:text-white">
+                  {item.value}
+                </p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Institution */}
         <div className="px-8 pb-4">
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            Institution: <span className="text-slate-800 dark:text-white font-medium">{tutor.institution}</span>
+            Institution:{" "}
+            <span className="text-slate-800 dark:text-white font-medium">
+              {tutor.institution}
+            </span>
           </p>
         </div>
 
-        {/* Book Button */}
         <div className="px-8 pb-8">
           {isFullyBooked ? (
-            <p className="text-red-500 font-medium">This session is fully booked.</p>
+            <p className="text-red-500 font-medium">
+              This session is fully booked.
+            </p>
           ) : isDateRestricted ? (
             <p className="text-yellow-600 font-medium">
               Booking opens on {sessionDate.toLocaleDateString()}.

@@ -4,7 +4,6 @@ const axiosSecure = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-// Request এ token যোগ করো
 axiosSecure.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -13,7 +12,6 @@ axiosSecure.interceptors.request.use((config) => {
   return config;
 });
 
-// Response এ 401/403 handle করো
 axiosSecure.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -22,7 +20,7 @@ axiosSecure.interceptors.response.use(
       window.location.href = "/auth/login";
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 const useAxiosSecure = () => axiosSecure;

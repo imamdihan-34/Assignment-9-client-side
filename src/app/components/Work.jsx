@@ -21,7 +21,6 @@ const steps = [
 const Work = () => {
   return (
     <section className="max-w-7xl mx-auto px-4 py-20">
-
       <div className="text-center mb-14">
         <h2 className="text-4xl font-bold text-slate-800 dark:text-white">
           How It Works
@@ -33,7 +32,6 @@ const Work = () => {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
-
         {steps.map((step) => (
           <div
             key={step.id}
@@ -43,16 +41,11 @@ const Work = () => {
               {step.id}
             </div>
 
-            <h3 className="text-2xl font-bold mt-6">
-              {step.title}
-            </h3>
+            <h3 className="text-2xl font-bold mt-6">{step.title}</h3>
 
-            <p className="text-gray-500 dark:text-gray-400">
-              {step.desc}
-            </p>
+            <p className="text-gray-500 dark:text-gray-400">{step.desc}</p>
           </div>
         ))}
-
       </div>
     </section>
   );

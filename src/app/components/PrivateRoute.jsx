@@ -9,13 +9,11 @@ const PrivateRoute = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    // ✅ loading শেষ হলে তারপর check করো
     if (!loading && !user) {
       router.push("/auth/login");
     }
   }, [user, loading, router]);
 
-  // ✅ loading এর সময় spinner দেখাও — redirect করো না
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -24,7 +22,6 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  // ✅ user না থাকলে null — redirect useEffect করবে
   if (!user) {
     return (
       <div className="flex justify-center items-center min-h-screen">

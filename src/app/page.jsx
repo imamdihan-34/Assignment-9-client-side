@@ -10,7 +10,6 @@ export const metadata = {
 export default function HomePage() {
   return (
     <div>
-      {/* ❌ <Navbar/> সরিয়ে দাও — layout.js এ already আছে */}
       <Banner />
       <AvailableTutors />
       <WhyChooseUs />

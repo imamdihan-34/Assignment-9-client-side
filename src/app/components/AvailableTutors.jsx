@@ -25,7 +25,6 @@ const AvailableTutors = ({ showAll = false }) => {
 
       const res = await axios.get(`${API}/tutors?${params.toString()}`);
 
-      // Home page এ ৬টা, Tutors page এ সব
       setTutors(showAll ? res.data : res.data.slice(0, 6));
     } catch (err) {
       console.error("Failed to load tutors");
@@ -37,16 +36,13 @@ const AvailableTutors = ({ showAll = false }) => {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTutors();
-    
   }, []);
 
-  // Search submit
   const handleSearch = (e) => {
     e.preventDefault();
     fetchTutors();
   };
 
-  // Reset filter
   const handleReset = () => {
     setSearch("");
     setStartDate("");
@@ -61,16 +57,13 @@ const AvailableTutors = ({ showAll = false }) => {
           Available Tutors
         </h2>
         <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Explore our top-rated tutors and book sessions
-          based on your learning goals and schedule.
+          Explore our top-rated tutors and book sessions based on your learning
+          goals and schedule.
         </p>
       </div>
 
-      {/* Search & Filter — শুধু Tutors page এ দেখাবে */}
       {showAll && (
         <div className="mb-10 space-y-4">
-
-          {/* Search */}
           <form onSubmit={handleSearch} className="flex gap-3">
             <div className="relative flex-1">
               <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -90,7 +83,6 @@ const AvailableTutors = ({ showAll = false }) => {
             </button>
           </form>
 
-          {/* Date Filter */}
           <div className="flex flex-col sm:flex-row gap-3 items-end">
             <div className="flex-1 space-y-1">
               <label className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -136,7 +128,6 @@ const AvailableTutors = ({ showAll = false }) => {
         </div>
       )}
 
-      {/* Tutors Grid */}
       {loading ? (
         <div className="flex justify-center items-center py-20">
           <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
@@ -152,11 +143,11 @@ const AvailableTutors = ({ showAll = false }) => {
           </button>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tutors.map((tutor) => (
-            <TutorCard key={tutor._id} tutor={tutor} />
-          ))}
-        </div>
+       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+  {tutors.map((tutor) => (
+    <TutorCard key={tutor._id} tutor={tutor}/>
+  ))}
+</div>
       )}
     </section>
   );
