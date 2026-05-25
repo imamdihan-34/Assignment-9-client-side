@@ -1,15 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
 import { useAuth } from "@/app/context/AuthContext";
 import { useTheme } from "next-themes";
+import { FiUser, FiLogOut } from "react-icons/fi";
 
 const Navbar = () => {
   const { user, logoutUser } = useAuth();
   const [open, setOpen] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
   const { theme, setTheme } = useTheme();
+  const dropdownRef = useRef(null);
+
+  // Dropdown বাইরে click করলে বন্ধ হবে
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const navLinks = (
     <>
@@ -55,21 +69,75 @@ const Navbar = () => {
           </button>
 
           {user ? (
-            <div className="flex items-center gap-3">
-              {user?.photoURL && (
-                <img
-                  src={user.photoURL}
-                  alt="user"
-                  className="w-10 h-10 rounded-full border-2 border-blue-500 cursor-pointer"
-                  title={user.displayName}
-                />
-              )}
+            // ✅ Profile Dropdown
+            <div className="relative" ref={dropdownRef}>
               <button
-                onClick={logoutUser}
-                className="bg-red-500 text-white px-4 py-2 rounded-xl hover:bg-red-600 transition text-sm"
+                onClick={() => setDropdown(!dropdown)}
+                className="flex items-center gap-2 hover:opacity-80 transition"
               >
-                Logout
+                {user?.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName}
+                    className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full border-2 border-blue-500 bg-blue-100 flex items-center justify-center">
+                    <FiUser className="text-blue-600" />
+                  </div>
+                )}
+                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${dropdown ? "rotate-180" : ""}`} />
               </button>
+
+              {/* Dropdown Menu */}
+              {dropdown && (
+                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg overflow-hidden z-50">
+
+                  {/* User Info */}
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+                    <p className="font-semibold text-sm text-slate-800 dark:text-white truncate">
+                      {user?.displayName || "User"}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      {user?.email}
+                    </p>
+                  </div>
+
+                  {/* Links */}
+                  <div className="py-1">
+                    <Link
+                      href="/my-toutors"
+                      onClick={() => setDropdown(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                    >
+                      <FiUser className="text-blue-500" />
+                      My Tutors
+                    </Link>
+                    <Link
+                      href="/my-bookings"
+                      onClick={() => setDropdown(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                    >
+                      <FiUser className="text-blue-500" />
+                      My Bookings
+                    </Link>
+                  </div>
+
+                  {/* Logout */}
+                  <div className="border-t border-gray-100 dark:border-gray-700 py-1">
+                    <button
+                      onClick={() => {
+                        logoutUser();
+                        setDropdown(false);
+                      }}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-gray-700 transition"
+                    >
+                      <FiLogOut />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <>
@@ -87,10 +155,9 @@ const Navbar = () => {
 
         {/* Mobile Right */}
         <div className="flex md:hidden items-center gap-2">
-          {/* Theme Toggle Mobile */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="w-9 h-9 rounded-full border flex items-center justify-center"
+            className="w-9 h-9 rounded-full border flex items-center justify-center dark:border-gray-600"
           >
             {theme === "dark" ? (
               <Sun className="w-4 h-4 text-yellow-400" />
@@ -100,25 +167,53 @@ const Navbar = () => {
           </button>
 
           <button onClick={() => setOpen(!open)}>
-            {open ? <X /> : <Menu />}
+            {open ? <X className="dark:text-white" /> : <Menu className="dark:text-white" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Dropdown */}
       {open && (
-        <div className="md:hidden px-4 pb-4 flex flex-col gap-4 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200">
+        <div className="md:hidden px-4 pb-4 flex flex-col gap-4 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 border-t border-gray-100 dark:border-gray-700">
           {navLinks}
+
           {user ? (
-            <button onClick={logoutUser}
-              className="bg-red-500 text-white py-2 rounded-xl">
-              Logout
-            </button>
+            <div className="space-y-2">
+              {/* User info mobile */}
+              <div className="flex items-center gap-3 py-2">
+                {user?.photoURL ? (
+                  <img src={user.photoURL} alt="user"
+                    className="w-9 h-9 rounded-full border-2 border-blue-500 object-cover" />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center">
+                    <FiUser className="text-blue-600" />
+                  </div>
+                )}
+                <div>
+                  <p className="font-medium text-sm">{user?.displayName || "User"}</p>
+                  <p className="text-xs text-gray-400">{user?.email}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => { logoutUser(); setOpen(false); }}
+                className="w-full flex items-center gap-2 bg-red-500 text-white py-2 px-4 rounded-xl justify-center"
+              >
+                <FiLogOut />
+                Logout
+              </button>
+            </div>
           ) : (
-            <>
-              <Link href="/auth/login">Login</Link>
-              <Link href="/auth/register">Register</Link>
-            </>
+            <div className="flex flex-col gap-2">
+              <Link href="/auth/login" onClick={() => setOpen(false)}
+                className="bg-blue-600 text-white py-2 px-4 rounded-xl text-center">
+                Login
+              </Link>
+              <Link href="/auth/register" onClick={() => setOpen(false)}
+                className="border py-2 px-4 rounded-xl text-center dark:border-gray-600">
+                Register
+              </Link>
+            </div>
           )}
         </div>
       )}

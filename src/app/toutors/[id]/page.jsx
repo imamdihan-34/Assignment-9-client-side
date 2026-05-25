@@ -8,7 +8,11 @@ import BookSessionModal from "@/app/components/BookSessionModal";
 import axios from "axios";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
-
+export async function generateMetadata({ params }) {
+  return {
+    title: `Tutor Details | MediQueue`,
+  };
+}
 export default function TutorDetailsPage() {
   const { id } = useParams();
   const [tutor, setTutor] = useState(null);

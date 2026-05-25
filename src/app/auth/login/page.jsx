@@ -11,7 +11,9 @@ const LoginPage = () => {
   const { loginUser, googleLogin } = useContext(AuthContext);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-
+useEffect(() => {
+  document.title = "Login | MediQueue";
+}, []);
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);

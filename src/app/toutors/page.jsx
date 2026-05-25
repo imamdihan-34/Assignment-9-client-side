@@ -1,9 +1,14 @@
-import AvailableTutors from "../components/AvailableTutors";
+"use client";
 
+import AvailableTutors from "../components/AvailableTutors";
+export const metadata = {
+  title: "Tutors | MediQueue",
+};
 export default function TutorsPage() {
   return (
     <div>
-      <AvailableTutors />
+      <AvailableTutors showAll={true} />
     </div>
   );
+ 
 }

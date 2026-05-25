@@ -1,14 +1,13 @@
-"use client";
 
 import { useContext, useState } from "react";
 import { AuthContext } from "@/app/context/AuthContext";
 import toast from "react-hot-toast";
-import axios from "axios";
-
-const API = process.env.NEXT_PUBLIC_API_URL;
+import useAxiosSecure from "@/app/hooks/useAxiosSecure";
+import { FiClock, FiDollarSign, FiMapPin, FiTarget } from "react-icons/fi";
 
 const BookSessionModal = ({ tutor, closeModal, onBookingSuccess }) => {
   const { user } = useContext(AuthContext);
+  const axiosSecure = useAxiosSecure(); // ✅
   const [loading, setLoading] = useState(false);
 
   const handleBooking = async (e) => {
@@ -20,7 +19,7 @@ const BookSessionModal = ({ tutor, closeModal, onBookingSuccess }) => {
     const phone = form.phone.value;
 
     try {
-      await axios.post(`${API}/bookings`, {
+      await axiosSecure.post("/bookings", { // ✅ axiosSecure দিয়ে
         tutorId: tutor._id,
         tutorName: tutor.tutorName,
         subject: tutor.subject,
@@ -32,8 +31,8 @@ const BookSessionModal = ({ tutor, closeModal, onBookingSuccess }) => {
         phone,
       });
 
-      toast.success("🎉 Booking Confirmed!");
-      onBookingSuccess(); // ✅ slot update করো
+      toast.success("Booking Confirmed!");
+      onBookingSuccess();
       closeModal();
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to book session!");
@@ -47,7 +46,7 @@ const BookSessionModal = ({ tutor, closeModal, onBookingSuccess }) => {
       <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl w-full max-w-lg shadow-xl">
 
         <h2 className="text-2xl font-bold mb-1 dark:text-white">Book Session</h2>
-        <p className="text-gray-500 mb-6 text-sm">
+        <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">
           Tutor: <span className="text-blue-600 font-semibold">{tutor.tutorName}</span> — {tutor.subject}
         </p>
 
@@ -67,11 +66,24 @@ const BookSessionModal = ({ tutor, closeModal, onBookingSuccess }) => {
             className="w-full border p-3 rounded-xl outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
           />
 
-          <div className="bg-blue-50 dark:bg-gray-700 rounded-xl p-4 text-sm text-gray-600 dark:text-gray-300 space-y-1">
-            <p>🕒 Time: <span className="font-medium">{tutor.timeSlot}</span></p>
-            <p>💰 Fee: <span className="font-medium">${tutor.hourlyFee}/hr</span></p>
-            <p>📍 Location: <span className="font-medium">{tutor.location}</span></p>
-            <p>🎯 Slots Left: <span className="font-medium text-green-500">{tutor.totalSlot}</span></p>
+          {/* Tutor Info */}
+          <div className="bg-blue-50 dark:bg-gray-700 rounded-xl p-4 text-sm text-gray-600 dark:text-gray-300 space-y-2">
+            <div className="flex items-center gap-2">
+              <FiClock className="text-blue-500 shrink-0" />
+              <span>Time: <span className="font-medium">{tutor.timeSlot}</span></span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FiDollarSign className="text-blue-500 shrink-0" />
+              <span>Fee: <span className="font-medium">${tutor.hourlyFee}/hr</span></span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FiMapPin className="text-blue-500 shrink-0" />
+              <span>Location: <span className="font-medium">{tutor.location}</span></span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FiTarget className="text-blue-500 shrink-0" />
+              <span>Slots Left: <span className="font-medium text-green-500">{tutor.totalSlot}</span></span>
+            </div>
           </div>
 
           <button
@@ -79,7 +91,7 @@ const BookSessionModal = ({ tutor, closeModal, onBookingSuccess }) => {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition font-semibold"
           >
-            {loading ? "Booking..." : "✅ Confirm Booking"}
+            {loading ? "Booking..." : "Confirm Booking"}
           </button>
         </form>
 
@@ -87,7 +99,7 @@ const BookSessionModal = ({ tutor, closeModal, onBookingSuccess }) => {
           onClick={closeModal}
           className="mt-4 w-full text-red-500 hover:underline text-sm"
         >
-          Cancel
+          Close
         </button>
       </div>
     </div>

@@ -11,7 +11,9 @@ const RegisterPage = () => {
   const { registerUser, googleLogin } = useContext(AuthContext);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-
+useEffect(() => {
+  document.title = "Register | MediQueue";
+}, []);
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);

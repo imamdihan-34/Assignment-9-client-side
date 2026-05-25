@@ -4,6 +4,9 @@ import AvailableTutors from "./components/AvailableTutors";
 import WhyChooseUs from "./components/WhyChooseUs";
 import HowItWorks from "./components/Work";
 
+export const metadata = {
+  title: "Home | MediQueue",
+};
 export default function HomePage() {
   return (
     <div>

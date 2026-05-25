@@ -23,6 +23,9 @@ export default function AddTutorPage() {
     timeSlot: "", hourlyFee: "", totalSlot: "", sessionStartDate: "",
     institution: "", experience: "", location: "", teachingMode: "",
   });
+  useEffect(() => {
+  document.title = "Add Tutor | MediQueue";
+}, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

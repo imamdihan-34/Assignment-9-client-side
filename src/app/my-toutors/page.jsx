@@ -29,6 +29,9 @@ export default function MyTutorsPage() {
       setLoading(false);
     }
   };
+  useEffect(() => {
+  document.title = "My Tutors | MediQueue";
+}, []);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect

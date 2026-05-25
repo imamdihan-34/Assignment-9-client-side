@@ -25,12 +25,9 @@ const MyBookingsPage = () => {
     }
   };
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (user?.email) fetchBookings();
-  
-  }, [user]);
-
+ useEffect(() => {
+  document.title = "My Bookings | MediQueue";
+}, []);
   // ✅ Cancel — PATCH request
   const handleCancel = async (id) => {
     try {
