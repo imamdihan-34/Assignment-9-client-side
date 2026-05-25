@@ -8,11 +8,7 @@ import BookSessionModal from "@/app/components/BookSessionModal";
 import axios from "axios";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
-export async function generateMetadata({ params }) {
-  return {
-    title: `Tutor Details | MediQueue`,
-  };
-}
+
 export default function TutorDetailsPage() {
   const { id } = useParams();
   const [tutor, setTutor] = useState(null);
@@ -30,13 +26,21 @@ export default function TutorDetailsPage() {
     }
   };
 
- useEffect(() => {
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  if (id) fetchTutor();
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (id) fetchTutor();
+   
+  }, [id]);
 
-}, [id]);
+  // ✅ Dynamic title
+  useEffect(() => {
+    if (tutor?.tutorName) {
+      document.title = `${tutor.tutorName} | MediQueue`;
+    } else {
+      document.title = "Tutor Details | MediQueue";
+    }
+  }, [tutor]);
 
-  // ✅ Booking success হলে tutor reload করো
   const handleBookingSuccess = async () => {
     const res = await axios.get(`${API}/tutors/${id}`);
     setTutor(res.data);
@@ -119,7 +123,6 @@ export default function TutorDetailsPage() {
         </div>
       </div>
 
-      {/* ✅ onBookingSuccess pass করা হয়েছে */}
       {showModal && (
         <BookSessionModal
           tutor={tutor}

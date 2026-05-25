@@ -1,4 +1,4 @@
-"use client";
+
 
 import AvailableTutors from "../components/AvailableTutors";
 export const metadata = {

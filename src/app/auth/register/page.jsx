@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react"; // ✅ useEffect যোগ
 import { AuthContext } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -11,13 +11,14 @@ const RegisterPage = () => {
   const { registerUser, googleLogin } = useContext(AuthContext);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-useEffect(() => {
-  document.title = "Register | MediQueue";
-}, []);
+
+  useEffect(() => {
+    document.title = "Register | MediQueue";
+  }, []);
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     const form = e.target;
     const name = form.name.value;
     const email = form.email.value;
@@ -62,48 +63,42 @@ useEffect(() => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-100 px-4">
-      <div className="w-full max-w-md bg-white p-8 rounded-3xl shadow-xl">
-
+    <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-gray-900 px-4">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl">
         <h2 className="text-4xl font-bold text-center text-blue-600 mb-8">Register</h2>
-
         <form onSubmit={handleRegister} className="space-y-5">
           <div>
-            <label className="font-medium">Name</label>
+            <label className="font-medium dark:text-white">Name</label>
             <input type="text" name="name" required placeholder="Enter your name"
-              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500" />
+              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" />
           </div>
           <div>
-            <label className="font-medium">Email</label>
+            <label className="font-medium dark:text-white">Email</label>
             <input type="email" name="email" required placeholder="Enter your email"
-              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500" />
+              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" />
           </div>
           <div>
-            <label className="font-medium">Photo URL</label>
+            <label className="font-medium dark:text-white">Photo URL</label>
             <input type="text" name="photo" placeholder="Enter photo URL (optional)"
-              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500" />
+              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" />
           </div>
           <div>
-            <label className="font-medium">Password</label>
+            <label className="font-medium dark:text-white">Password</label>
             <input type="password" name="password" required placeholder="Create password"
-              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500" />
+              className="w-full mt-2 px-4 py-3 border rounded-xl outline-none focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" />
           </div>
-
           <button type="submit" disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
-
         <div className="my-6 text-center text-gray-400">OR</div>
-
         <button onClick={handleGoogleLogin}
-          className="w-full border py-3 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-100 transition">
+          className="w-full border dark:border-gray-600 py-3 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-100 dark:hover:bg-gray-700 transition dark:text-white">
           <FcGoogle size={24} />
           Continue with Google
         </button>
-
-        <p className="text-center mt-6 text-gray-600">
+        <p className="text-center mt-6 text-gray-600 dark:text-gray-400">
           Already have an account?{" "}
           <Link href="/auth/login" className="text-blue-600 font-semibold hover:underline">
             Login

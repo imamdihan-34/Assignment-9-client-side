@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import PrivateRoute from "../../components/PrivateRoute";
 import toast from "react-hot-toast";

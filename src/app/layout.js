@@ -1,8 +1,8 @@
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
-import { AuthProvider } from "./context/AuthContext";  // ✅ relative path
-import Navbar from "./components/Navbar";              // ✅ relative path
-import Footer from "./components/Footer";              // ✅ relative path
+import { AuthProvider } from "./context/AuthContext";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import "./globals.css";
 
 export const metadata = {
@@ -16,8 +16,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-       <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <body suppressHydrationWarning> {/* ✅ যোগ করো */}
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <AuthProvider>
             <div className="flex flex-col min-h-screen">
               <Navbar />

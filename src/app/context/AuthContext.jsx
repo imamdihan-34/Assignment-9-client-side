@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
-      // ✅ User থাকলে token নাও, না থাকলে মুছো
       if (currentUser?.email) {
         try {
           const res = await axios.post(`${API}/auth/jwt`, {
@@ -44,7 +43,6 @@ export const AuthProvider = ({ children }) => {
     });
     return () => unsubscribe();
   }, []);
-
   // Register
   const registerUser = async (name, email, password, photoURL) => {
     const result = await createUserWithEmailAndPassword(auth, email, password);
@@ -90,7 +88,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, registerUser, loginUser, googleLogin, logoutUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        registerUser,
+        loginUser,
+        googleLogin,
+        logoutUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
