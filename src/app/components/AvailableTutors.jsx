@@ -20,7 +20,7 @@ const AvailableTutors = ({ showAll = false }) => {
       if (startDate) params.append("startDate", startDate);
       if (endDate) params.append("endDate", endDate);
 
-      // ✅ hardcode করো
+  
       const res = await axios.get(
         `http://localhost:5000/tutors?${params.toString()}`
       );
