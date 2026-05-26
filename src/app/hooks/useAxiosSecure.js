@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://mediqueue-server-ecru.vercel.app",
 });
 
 axiosSecure.interceptors.request.use((config) => {

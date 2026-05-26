@@ -5,6 +5,8 @@ import TutorCard from "../components/ToutorCard";
 import axios from "axios";
 import { FiSearch, FiFilter, FiX } from "react-icons/fi";
 
+const API = process.env.NEXT_PUBLIC_API_URL || "https://mediqueue-server-ecru.vercel.app";
+
 const AvailableTutors = ({ showAll = false }) => {
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,10 +22,7 @@ const AvailableTutors = ({ showAll = false }) => {
       if (startDate) params.append("startDate", startDate);
       if (endDate) params.append("endDate", endDate);
 
-  
-      const res = await axios.get(
-        `http://localhost:5000/tutors?${params.toString()}`
-      );
+      const res = await axios.get(`${API}/tutors?${params.toString()}`);
       setTutors(showAll ? res.data : res.data.slice(0, 6));
     } catch (err) {
       console.error("Failed to load tutors", err.message);
@@ -33,7 +32,6 @@ const AvailableTutors = ({ showAll = false }) => {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTutors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
