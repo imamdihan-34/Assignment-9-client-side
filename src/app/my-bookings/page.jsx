@@ -26,7 +26,6 @@ const MyBookingsPage = () => {
     }
   };
 
-  // ✅ fetchBookings call করো
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (user?.email) fetchBookings();

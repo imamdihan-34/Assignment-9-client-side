@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// ✅ hardcode করো
 const axiosSecure = axios.create({
   baseURL: "http://localhost:5000",
 });
