@@ -32,8 +32,9 @@ const AvailableTutors = ({ showAll = false }) => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchTutors();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, []);
 
   const handleSearch = (e) => {

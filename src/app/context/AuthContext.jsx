@@ -16,7 +16,6 @@ import axios from "axios";
 const API = process.env.NEXT_PUBLIC_API_URL;
 
 export const AuthContext = createContext(null);
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
