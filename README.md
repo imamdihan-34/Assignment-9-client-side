@@ -3,6 +3,8 @@
 MediQueue is a modern tutor booking platform where students can explore tutors, book learning sessions, and manage their scheduled classes efficiently.
 The platform eliminates manual scheduling conflicts and provides a smooth booking experience with real-time slot management and secure authentication.
 
+# Live link: https://mediqueue-client-side.vercel.app/
+
 # Features
 * Secure Authentication System using Firebase & JWT
 * Browse and Book Tutors with real-time slot availability
